@@ -16,7 +16,7 @@
     msg: 'Cluster {{ k8s_cluster_name }} already present !'
   when: existing_cluster | length > 0
   
-  - name: Adds cluster
+- name: Adds cluster
   uri:
     url: 'https://{{ rancher_url }}/v3/cluster'
     method: POST

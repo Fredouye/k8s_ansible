@@ -1,6 +1,7 @@
 - name: Gets a list of clusters
   uri:
     url: 'https://{{ rancher_url }}/v3/clusters'
+    validate_certs: false
     headers:
       Authorization: 'Bearer {{ api_token }}'
   register: clusters_list
@@ -19,13 +20,13 @@
 - name: Adds cluster
   uri:
     url: 'https://{{ rancher_url }}/v3/cluster'
+    validate_certs: false
     method: POST
     body_format: json
-    body: "{
-      'type': 'cluster',
-      'name': '{{ k8s_cluster_name }}',
-      'description': 'Cluster {{ k8s_cluster_name }}'
-    }"
+    body:
+      type: cluster
+      name: '{{ k8s_cluster_name }}'
+      description: 'Cluster {{ k8s_cluster_name }}'
     headers:
       Authorization: 'Bearer {{ api_token }}'
     status_code: 201
@@ -38,11 +39,12 @@
 - name: Generates cluster token
   uri:
     url: 'https://{{ rancher_url }}/v3/clusters/{{ cluster_id }}/clusterregistrationtoken'
+    validate_certs: false
     method: POST
     body_format: json
     body:
-     type: clusterRegistrationToken
-     clusterId: '{{ cluster_id }}'
+      type: clusterRegistrationToken
+      clusterId: '{{ cluster_id }}'
     headers:
       Authorization: 'Bearer {{ api_token }}'
     status_code: 201
@@ -55,6 +57,7 @@
 - name: Gets registration command
   uri:
     url: 'https://{{ rancher_url }}/v3/clusters/{{ cluster_id }}/clusterregistrationtoken/{{ token_id }}'
+    validate_certs: false
     method: GET
     body_format: json
     headers:
